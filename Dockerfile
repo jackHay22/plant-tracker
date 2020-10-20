@@ -69,4 +69,4 @@ RUN make -j8
 EXPOSE 8000
 EXPOSE 8088
 
-CMD ["./plant_server.out -p 8000"]
+ENTRYPOINT ["./plant_server.out","-p","8000"]
