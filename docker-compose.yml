@@ -6,7 +6,7 @@ services:
     ports:
       - "80:8080"
     volumes:
-      - ./proxy:/etc/nginx
+      - ./proxy:/etc/nginx/conf.d
     depends_on:
       - grafana
       - plant_tracker
