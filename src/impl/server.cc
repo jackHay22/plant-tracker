@@ -4,7 +4,7 @@
 
 #include "server.h"
 #include "monitor.h"
-#include "endpts"
+#include "endpts.h"
 #include <memory>
 #include <served/served.hpp>
 #include <boost/algorithm/string.hpp>
@@ -43,7 +43,7 @@ namespace server {
     /*
      * Register endpoints
      */
-    MULTIPLEXER.handle(api_stub + "/push").post(
+    multiplexer.handle(api_stub + "/push").post(
      [&prom_publisher]
        (served::response& res,
         const served::request& req) {
@@ -72,6 +72,6 @@ namespace server {
     served::net::server server("0.0.0.0",
                                std::to_string(port),
                                multiplexer);
-    server->run(workers);
+    server.run(workers);
   }
 }}

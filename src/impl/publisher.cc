@@ -3,7 +3,7 @@
  */
 
 #include "publisher.h"
-#include "monitoring.h"
+#include "monitor.h"
 
 #define LOG_DOMAIN "plant_tracker::publisher"
 
@@ -31,7 +31,7 @@ namespace publisher {
     monitor::log_info("serving prometheus scrape requests: " + bind_addr,LOG_DOMAIN);
 
     registry = std::make_shared<prometheus::Registry>();
-    exposer = std::make_shared<prometheus::Exposer>(bind_addr);
+    exposer = std::make_unique<prometheus::Exposer>(bind_addr);
 
     //register the registry
     exposer->RegisterCollectable(registry);
@@ -53,7 +53,7 @@ namespace publisher {
       std::unique_lock<std::shared_mutex> unique_lookup_lock(gauge_families_lock);
 
       //create a new family
-      GAUGE_FAMILIES[family_name] = std::make_unique<gauge_grp_t>(
+      gauge_families[family_name] = std::make_unique<gauge_grp_t>(
         &prometheus::BuildGauge()
          .Name(family_name)
          .Help(help)
@@ -104,7 +104,6 @@ namespace publisher {
             gauge_name,
             &it->second->family->Add(labels)));
     }
-
     return true;
   }
 
@@ -116,7 +115,7 @@ namespace publisher {
   bool publisher_t::gauge_family_exists(const std::string& family_name) {
     //read lock family lookup
     std::shared_lock<std::shared_mutex> shared_lookup_lock(gauge_families_lock);
-    return (gauge_families.find(gauge_name) != gauge_families.end())
+    return (gauge_families.find(family_name) != gauge_families.end());
   }
 
   /**
@@ -137,8 +136,9 @@ namespace publisher {
     if (it != gauge_families.end()) {
       //get a read lock on the family
       std::shared_lock<std::shared_mutex> shared_family_lock(it->second->lock);
-      return (it->second->gauges.find(gauge_name) != it->second->gauges.end())
+      return (it->second->gauges.find(gauge_name) != it->second->gauges.end());
     }
+    return false;
   }
 
   /**
@@ -164,7 +164,7 @@ namespace publisher {
 
       //look for the gauge
       std::unordered_map<std::string,prometheus::Gauge*>::iterator it_f
-            = it->second->gauges.find(family_name);
+            = it->second->gauges.find(gauge_name);
 
       if (it_f != it->second->gauges.end()) {
         //set the value

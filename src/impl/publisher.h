@@ -42,7 +42,7 @@ namespace publisher {
     std::shared_mutex gauge_families_lock;
 
     //prometheus client members
-    std::unique_ptr<prometheus::Registry> registry;
+    std::shared_ptr<prometheus::Registry> registry;
     std::unique_ptr<prometheus::Exposer> exposer;
 
   public:
