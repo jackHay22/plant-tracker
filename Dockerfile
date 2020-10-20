@@ -58,6 +58,8 @@ RUN git clone https://github.com/jupp0r/prometheus-cpp.git && \
 WORKDIR /
 RUN rm -r prometheus-cpp
 
+RUN ldconfig
+
 RUN mkdir plant_build
 WORKDIR plant_build/
 
