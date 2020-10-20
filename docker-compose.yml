@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:stable
+    ports:
+      - "8000:8080"
+    volumes:
+      - ./proxy:/etc/nginx/conf.d
+  plant_tracker:
+    build: .
+  prometheus:
+    build: ./prometheus
+    volumes:
+      - prometheus:/prometheus
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - grafana:/var/lib/grafana
+volumes:
+  grafana:
+  prometheus:
