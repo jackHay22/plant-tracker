@@ -7,6 +7,7 @@
 
 #define VALUE_KEY "value"
 #define NAME_KEY "name"
+#define FAMILY_KEY "family"
 #define LOG_DOMAIN "plant_tracker::endpts"
 
 namespace plant_tracker {
@@ -38,22 +39,31 @@ namespace endpts {
                   const json_t& body) {
 
     //verify the payload
-    if (contains_number(body,VALUE_KEY) && contains_string(body,NAME_KEY)) {
+    if (contains_number(body,VALUE_KEY) &&
+        contains_string(body,NAME_KEY) &&
+        contains_string(body,FAMILY_KEY)) {
       const std::string name = body[NAME_KEY].get<std::string>();
+      const std::string family = body[FAMILY_KEY].get<std::string>();
       double value = body[VALUE_KEY].get<double>();
 
+      //check if the gauge family has been created
+      if (!prom_publisher.gauge_family_exists(family)) {
+        prom_publisher.mk_gauge_family(family,"tracks " + family,{{family,"TOTAL"}});
+      }
+
       //check if a gauge has been created
-      if (!prom_publisher.gauge_exists("soil_moisture",name)) {
-        prom_publisher.mk_gauge("soil_moisture",name,{{"moisture",name}});
+      if (!prom_publisher.gauge_exists(family,name)) {
+        prom_publisher.mk_gauge(family,name,{{family,name}});
       }
 
       //set the value of the gauge
-      if (prom_publisher.set_gauge("soil_moisture",name,value)) {
+      if (prom_publisher.set_gauge(family,name,value)) {
         return 200;
       }
 
-      monitor::log_info("failed to set moisture value for: " +
-                        name,LOG_DOMAIN);
+      monitor::log_info("failed to value for: " +
+                        name + " in " + family +
+                        " family",LOG_DOMAIN);
       return 500;
     }
     monitor::log_info("invalid ingest payload",LOG_DOMAIN);

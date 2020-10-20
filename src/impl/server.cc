@@ -37,11 +37,6 @@ namespace server {
     std::unique_ptr<publisher::publisher_t> prom_publisher =
       std::make_unique<publisher::publisher_t>(prom_port);
 
-    //create the soil moisture family
-    prom_publisher.mk_gauge_family("soil_moisture",
-                                   "tracks soil moisture for different plants",
-                                   {{}});
-
     //create a new multiplexer
     served::multiplexer multiplexer;
 
