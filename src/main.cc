@@ -14,6 +14,7 @@ using namespace plant_tracker;
 int main(int argc, char *argv[]) {
   int c;
   int port = 8000;
+  int prom_port = 8088;
   std::string api_stub = "/api/v1";
   int workers = 5;
 
@@ -26,6 +27,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  server::serve_endpts(port,workers,api_stub);
+  //serve endpoints
+  server::serve_endpts(port,prom_port,workers,api_stub);
   return 1;
 }

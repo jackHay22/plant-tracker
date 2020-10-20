@@ -4,9 +4,12 @@ services:
   nginx:
     image: nginx:stable
     ports:
-      - "8000:8080"
+      - "80:8080"
     volumes:
-      - ./proxy:/etc/nginx/conf.d
+      - ./proxy:/etc/nginx
+    depends_on:
+      - grafana
+      - plant_tracker
   plant_tracker:
     build: .
   prometheus:

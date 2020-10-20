@@ -13,10 +13,14 @@ namespace server {
   /**
    * Serve new connections
    * @param port     the port to serve connections on
+   * @param prom_port the port to serve prometheus requests on
    * @param workers  thread pool size
    * @param api_stub the prefix for regular endpt paths
    */
-  void serve_endpts(int port, int workers, const std::string& api_stub);
+  void serve_endpts(int port,
+                    int prom_port,
+                    int workers,
+                    const std::string& api_stub);
 
 }}
 
