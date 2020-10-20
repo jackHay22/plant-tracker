@@ -18,6 +18,14 @@ namespace monitor {
   void log_info(const std::string& msg,
                 const std::string& domain);
 
+  /**
+   * Write an error message
+   * @param msg    the message
+   * @param domain the namespace the error occured in
+   */
+  void log_err(const std::string& msg,
+               const std::string& domain);
+
 }}
 
 #endif /*_PLANT_TRACKER_MONITOR_H*/

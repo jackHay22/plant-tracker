@@ -4,12 +4,9 @@
 
 #include <string>
 #include <unistd.h>
-#include "impl/log.h"
 #include "impl/server.h"
 
 using namespace plant_tracker;
-
-#define LOG_DOMAIN "main"
 
 /**
  * Entrypoint
@@ -29,12 +26,6 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  //log configuration
-  monitor::log_info("starting server on port: " +
-                    std::to_string(port) +
-                    " with endpt path: " + api_stub,
-                    LOG_DOMAIN);
-
-  server::serve_endpts(port,api_stub);
+  server::serve_endpts(port,workers,api_stub);
   return 1;
 }
