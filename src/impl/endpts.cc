@@ -53,7 +53,7 @@ namespace endpts {
 
       //check if a gauge has been created
       if (!prom_publisher.gauge_exists(family,name)) {
-        prom_publisher.mk_gauge(family,name,{{"gauge_" + name,"value"}});
+        prom_publisher.mk_gauge(family,name,{{"name","gauge_"+name}});
       }
 
       //set the value of the gauge
