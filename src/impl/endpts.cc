@@ -48,12 +48,12 @@ namespace endpts {
 
       //check if the gauge family has been created
       if (!prom_publisher.gauge_family_exists(family)) {
-        prom_publisher.mk_gauge_family(family,"tracks " + family,{{family,"TOTAL"}});
+        prom_publisher.mk_gauge_family(family,"tracks " + family,{{"family_" + family,"TOTAL"}});
       }
 
       //check if a gauge has been created
       if (!prom_publisher.gauge_exists(family,name)) {
-        prom_publisher.mk_gauge(family,name,{{family,name}});
+        prom_publisher.mk_gauge(family,name,{{"gauge_" + name,"value"}});
       }
 
       //set the value of the gauge

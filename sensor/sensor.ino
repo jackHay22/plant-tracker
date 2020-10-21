@@ -4,15 +4,12 @@
  #include <ESP8266HTTPClient.h>
  #include <ESP8266WiFi.h>
 
- #define SSID "ssid"
- #define PSWD "password"
-
 void setup() {
   Serial.begin(9600);
-  WiFi.begin(SSID,PSWD);
+  WiFi.begin("ssid","pass");
 
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.println("Connecting to " + SSID + "...");
+    Serial.println("Connecting...");
     delay(500);
   }
 }
@@ -25,7 +22,7 @@ void loop() {
   double value = (double) analogRead(A0);
 
   Serial.println(value);
-  
+
   HTTPClient http;
 
   http.begin("http://10.0.0.149/api/v1/push");
