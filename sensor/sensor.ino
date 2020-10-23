@@ -7,7 +7,7 @@
 
 #define AMAX 1023
 #define ANALOG0 A0
-#define DIGITAL7 7
+#define DIGITAL0 0
 
 dht DHT;
 
@@ -36,7 +36,7 @@ void loop() {
   /*
    * Get the temperature and humidity readings
    */
-  DHT.read11(DHT11_PIN);
+  DHT.read11(DIGITAL0);
 
   /*
    * Post the temperature
